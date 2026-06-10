@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>京都初夏·紫陽花與川床美學之旅</title>
+    <style>
+        :root {
+            /* Light Mode Colors */
+            --primary: #512DA8;
+            --primary-light: #EDE7F6;
+            --attraction-bg: #F3E5F5;
+            --attraction-border: #9C27B0;
+            --food-bg: #FFEBEE;
+            --food-border: #E53935;
+            --transport-bg: #E1F5FE;
+            --transport-border: #0288D1;
+            --hotel-bg: #E0F2F1;
+            --hotel-border: #00897B;
+            --text-dark: #1E293B; /* Deep slate for sharp contrast in Day Mode */
+            --text-muted: #64748B;
+            --bg-main: #F1F5F9;
+            --bg-card: #ffffff;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --nav-bg: #ffffff;
+            --food-reason-bg: #FEF3C7;
+            --food-reason-border: #D97706;
+            --accordion-bg: #F8FAFC;
+            --accordion-border: #D1C4E9;
+            --btn-map-bg: #FFFFFF;
+            --btn-map-border: #E2E8F0;
+        }
+
+        body.dark-mode {
+            /* Dark Mode Colors */
+            --primary: #B39DDB;
+            --primary-light: #311B92;
+            --attraction-border: #CE93D8;
+            --food-border: #EF9A9A;
+            --transport-border: #81D4FA;
+            --hotel-border: #80CBC4;
+            --text-dark: #F1F5F9; /* Pure light grey for high readability in Dark Mode */
+            --text-muted: #94A3B8;
+            --bg-main: #0F172A;
+            --bg-card: #1E293B;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --nav-bg: #1E293B;
+            --food-reason-bg: #451A03;
+            --food-reason-border: #F59E0B;
+            --accordion-bg: #0F172A;
+            --accordion-border: #334155;
+            --btn-map-bg: #334155;
+            --btn-map-border: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.5;
+            padding-bottom: 60px;
+        }
+
+        /* Top Persistent Navigation */
+       .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            display: flex;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+            align-items: center;
+        }
+
+       .nav-btn {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-muted);
+            border: none;
+            background: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+
+       .nav-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+       .dark-mode-toggle {
+            padding: 0 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        /* Container adjustment for fixed header */
+       .container {
+            margin-top: 60px;
+            padding: 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+       .page-section { display: none; }
+       .page-section.active { display: block; }
+
+        /* Summary Tab Styling */
+       .summary-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--card-shadow);
+            border-left: 5px solid var(--primary);
+        }
+
+       .summary-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+       .flight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+       .flight-box {
+            background: var(--bg-main);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--btn-map-border);
+        }
+
+       .flight-tag {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        /* Day Sub-Navigation */
+       .day-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 8px 0 16px 0;
+            scrollbar-width: none;
+        }
+       .day-nav::-webkit-scrollbar { display: none; }
+
+       .day-tab-btn {
+            flex: 0 0 65px;
+            text-align: center;
+            padding: 10px 0;
+            background: var(--bg-card);
+            border: 1px solid var(--btn-map-border);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+       .day-tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(81, 45, 168, 0.3);
+        }
+
+       .day-content { display: none; }
+       .day-content.active { display: block; }
+
+       .day-header-summary {
+            background: linear-gradient(135deg, #673AB7, #512DA8);
+            color: white;
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        body.dark-mode .day-header-summary {
+            background: linear-gradient(135deg, #311B92, #1A237E);
+        }
+
+       .day-header-summary h2 { font-size: 20px; margin-bottom: 6px; }
+       .day-header-summary p { font-size: 13px; opacity: 0.9; }
+
+        /* Timeline Card System */
+       .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+       .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 4px;
+            width: 2px;
+            background: var(--btn-map-border);
+        }
+
+       .timeline-card {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--bg-card);
+            transition: all 0.2s;
+            overflow: hidden;
+        }
+
+        /* Background Stack Setup: Wallpaper (1) -> Glass Mask (1::after) -> Pure Content (2) */
+       .card-bg-wrapper {
+            position: absolute!important;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-size: cover;
+            background-position: center;
+            border-radius: inherit;
+            z-index: 1!important;
+        }
+
+       .card-bg-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.75); /* Extreme high contrast light mask */
+            border-radius: inherit;
+            transition: background 0.3s;
+            z-index: 1;
+        }
+
+        /* Descendant Selector with space: Dim background image under Dark Mode */
+        body.dark-mode .card-bg-wrapper::after {
+            background: rgba(20, 20, 20, 0.75)!important;
+        }
+
+       .card-content {
+            position: relative;
+            z-index: 2!important; /* Forces text content above semi-transparent layers */
+        }
+
+       .timeline-node {
+            position: absolute;
+            left: -22px;
+            top: 18px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #B0BEC5;
+            border: 2px solid var(--bg-main);
+            z-index: 3!important;
+        }
+
+        /* Card Categories Theme */
+       .card-attraction { border-left-color: var(--attraction-border); }
+       .card-attraction.timeline-node { background: var(--attraction-border); }
+        
+       .card-food { border-left-color: var(--food-border); }
+       .card-food.timeline-node { background: var(--food-border); }
+
+       .card-transport { border-left-color: var(--transport-border); }
+       .card-transport.timeline-node { background: var(--transport-border); }
+
+       .card-hotel { border-left-color: var(--hotel-border); }
+       .card-hotel.timeline-node { background: var(--hotel-border); }
+
+        /* Card Inner Elements */
+       .card-time-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+        
+       .card-attraction.card-time-badge { background-color: var(--attraction-border)!important; color: #ffffff!important; }
+       .card-food.card-time-badge { background-color: var(--food-border)!important; color: #ffffff!important; }
+       .card-transport.card-time-badge { background-color: var(--transport-border)!important; color: #ffffff!important; }
+       .card-hotel.card-time-badge { background-color: var(--hotel-border)!important; color: #ffffff!important; }
+
+       .card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+
+       .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+       .card-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Detail Accordion Toggles */
+       .accordion-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            background: var(--accordion-bg);
+            border-radius: 8px;
+            padding: 0 12px;
+            margin-top: 0;
+            border: 1px dashed transparent;
+            font-size: 13px;
+            line-height: 1.6;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out, margin 0.3s ease-out, border-color 0.3s ease-out;
+        }
+
+       .expandable-card {
+            cursor: pointer;
+        }
+
+       .expandable-card.expanded .accordion-content {
+            opacity: 1;
+            padding: 12px;
+            margin-top: 12px;
+            border-color: var(--accordion-border);
+        }
+
+       .detail-section { margin-bottom: 8px; }
+       .detail-section:last-child { margin-bottom: 0; }
+        
+       .detail-text-highlight {
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 8px;
+        }
+
+        /* Map & Nav Buttons: Pure Compact Circles, Zero Wrapping, Auto Centered */
+       .btn-map {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--btn-map-bg);
+            border: 1px solid var(--btn-map-border);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%!important;
+            font-size: 16px;
+            text-decoration: none;
+            z-index: 10;
+            flex-shrink: 0!important; /* Prevent layout compression on narrow viewports */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, background-color 0.2s;
+            color: #1A73E8;
+        }
+       .btn-map:active {
+            transform: scale(0.92);
+        }
+        
+        body.dark-mode .btn-map {
+            color: #81D4FA;
+        }
+
+       .route-guide-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+       .warning-tag {
+            background: #FFF3E0;
+            color: #E65100;
+            border: 1px solid #FFE0B2;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        
+        body.dark-mode .warning-tag {
+            background: #4E342E;
+            color: #FFB74D;
+            border-color: #8D6E63;
+        }
+
+        /* Flex Contingency Plans */
+       .flex-selector {
+            background: var(--accordion-bg);
+            padding: 4px;
+            border-radius: 10px;
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+            border: 1px solid var(--btn-map-border);
+        }
+
+       .flex-opt-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 8px 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+       .flex-opt-btn.active {
+            background: var(--bg-card);
+            color: var(--primary);
+            box-shadow: var(--card-shadow);
+        }
+
+       .flex-plan-card { display: none; }
+       .flex-plan-card.active { display: block; }
+        
+       .food-reason {
+            background: var(--food-reason-bg);
+            border-left: 3px solid var(--food-reason-border);
+            padding: 8px 12px;
+            font-size: 13px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 6px;
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <button class="nav-btn active" onclick="switchPage('summary', this)">📊 旅程總覽</button>
+        <button class="nav-btn" onclick="switchPage('itinerary', this)">📅 每日行程</button>
+        <button class="dark-mode-toggle" id="dark-mode-btn" onclick="toggleDarkMode()">🌙</button>
+    </nav>
+
+    <div class="container">
+
+        <section id="page-summary" class="page-section active">
+            <div class="summary-card">
+                <div class="summary-title">✈️ 航班資訊</div>
+                <div class="flight-grid">
+                    <div class="flight-box">
+                        <span class="flight-tag">去程 AK170</span>
+                        <div style="font-weight:bold; font-size:15px;">06/17 (週三)</div>
+                        <div style="font-size:13px; color:var(--text-muted);">08:30 高雄 (KHH)</div>
+                        <div style="font-size:13px; color:var(--text-muted);">12:40 大阪 (KIX)</div>
+                    </div>
+                    <div class="flight-box">
+                        <span class="flight-tag" style="background:var(--transport-border);">回程 AK171</span>
+                        <div style="font-weight:bold; font-size:15px;">06/22 (週一)</div>
+                        <div style="font-size:13px; color:var(--text-muted);">13:45 大阪 (KIX)</div>
+                        <div style="font-size:13px; color:var(--text-muted);">16:00 高雄 (KHH)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card" style="position: relative; overflow: hidden;">
+                <div class="card-bg-wrapper" style="background-image: url('https://cdn.jalan.jp/jalan/images/pict3L/Y0/Y326390/Y326390266.jpg');"></div>
+                <div style="position: relative; z-index: 1;">
+                    <div class="summary-title">🏨 住宿地點</div>
+                    <div class="card-title-row">
+                        <div style="font-weight: bold; font-size: 15px;">Hotel M's Est Shijo Karasuma (四條烏丸)</div>
+                        <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Hotel+Ms+Est+Shijo+Karasuma" target="_blank" onclick="event.stopPropagation()">📍</a>
+                    </div>
+                    <div style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">全程入住同一飯店，免搬行李</div>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-title">📅 路線亮點速覽</div>
+                <ul style="padding-left: 18px; font-size: 14px; line-height: 1.8;">
+                    <li><strong style="color:var(--primary);">D1 抵達京都：</strong>新風館繡球花冰、錦市場、先斗町</li>
+                    <li><strong style="color:var(--primary);">D2 東山美學：</strong>兩足院半夏生、清水寺散步、納涼床燒肉</li>
+                    <li><strong style="color:var(--primary);">D3 川床避暑：</strong>下鴨神社、貴船川床料理、南禪寺水路閣</li>
+                    <li><strong style="color:var(--primary);">D4 宇治花海：</strong>三室戶寺紫陽花、伊藤久右衛門、午後彈性案</li>
+                    <li><strong style="color:var(--primary);">D5 西南尋寶：</strong>東寺弘法市、水上料亭錦水亭、楊谷寺</li>
+                    <li><strong style="color:var(--primary);">D6 伴手補給：</strong>市區藥妝採購、返程高雄</li>
+                </ul>
+            </div>
+
+            <div class="summary-card" style="border-left-color: var(--food-reason-border);">
+                <div class="summary-title" style="color:var(--food-reason-border);">⚠️ 行前預約檢查清單</div>
+                <ul style="padding-left: 18px; font-size: 13px; line-height: 1.6;">
+                    <li><strong>D2 上午：</strong>建仁寺兩足院（半夏生特別公開需先預約）</li>
+                    <li><strong>D2 晚餐：</strong>京的燒肉處 弘 三條木屋町店（納涼床席位熱門）</li>
+                    <li><strong>D3 中午：</strong>貴船 藤や (Fujiya)（川床料理務必提早訂位）</li>
+                    <li><strong>D5 中午：</strong>長岡京 錦水亭（湖面水上料亭需預訂）</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <section id="page-itinerary" class="page-section">
+            
+            <div class="day-nav">
+                <button class="day-tab-btn active" onclick="switchDay(1, this)">D1<br><span style="font-size:11px;">6/17</span></button>
+                <button class="day-tab-btn" onclick="switchDay(2, this)">D2<br><span style="font-size:11px;">6/18</span></button>
+                <button class="day-tab-btn" onclick="switchDay(3, this)">D3<br><span style="font-size:11px;">6/19</span></button>
+                <button class="day-tab-btn" onclick="switchDay(4, this)">D4<br><span style="font-size:11px;">6/20</span></button>
+                <button class="day-tab-btn" onclick="switchDay(5, this)">D5<br><span style="font-size:11px;">6/21</span></button>
+                <button class="day-tab-btn" onclick="switchDay(6, this)">D6<br><span style="font-size:11px;">6/22</span></button>
+            </div>
+
+            <div id="day-1" class="day-content active">
+                <div class="day-header-summary">
+                    <h2>Day 1：抵達與市區微醺暖身</h2>
+                    <p>亮點：新風館初夏甜點與古風街道夜訪</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-card card-hotel expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://cdn.jalan.jp/jalan/images/pict3L/Y0/Y326390/Y326390266.jpg');"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">下午</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏨 抵達京都與飯店 Check-in</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Hotel+Ms+Est+Shijo+Karasuma" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p style="font-size:13px; color:var(--text-muted);">抵達關西機場後搭乘特急前往京都車站，再轉至四條烏丸的 Hotel M's Est 辦理入住，放置行李。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">從飯店步行至新風館</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Hotel+Ms+Est+Shijo+Karasuma&destination=Shinphukan+Kyoto" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚶‍♂️ 步行約 8-10 分鐘 (約 700公尺)</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://megapx-assets.dcard.tw/images/0e27e9f7-a8a0-4ab5-a205-0e473c207b32/1280.jpeg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">16:00 - 17:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 新風館 (THISIS) SHIZEN</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Shinphukan+THISIS+SHIZEN+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            
+
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>位於設計感商場內的當代花藝與甜點店。</p>
+                                    <p class="detail-text-highlight">將紫陽花元素融入豆沙冰淇淋的視覺設計，不僅好拍，口味也極具現代感。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">從新風館前往錦市場</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Shinphukan+Kyoto&destination=Nishiki+Market" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚶‍♂️ 步行約 7 分鐘 (約 550公尺)</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-food expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/ea/18/96/a-5-omi-beef-wagyu-sukiyaki.jpg?w=900&h=500&s=1');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">18:00 - 20:00</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🍽️ 近江牛 品川亭（京都店）</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>專門販售滋賀縣優質近江牛的專賣店。</p>
+                                    <p class="detail-text-highlight">錦市場旁的秘密基地，推薦現炸的「和牛可樂餅」，是逛街時的極致開胃小點。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">從錦市場散步至先斗町</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Nishiki+Market&destination=Pontocho+Alley" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚶‍♂️ 步行約 10 分鐘 (約 800公尺)</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://sister.travel/wp-content/uploads/2024/01/%E5%85%88%E6%96%97%E7%94%BA1.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">20:00 以後</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 先斗町巷弄夜間散步</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Pontocho+Alley+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>狹窄而神祕的巷弄，充滿懷舊京都風味。</p>
+                                    <p class="detail-text-highlight">此處為京都著名五花街之一，入夜後千鳥紅提燈亮起，環境極具神祕與古都浪漫氛圍，非常適合漫步探索。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="day-2" class="day-content">
+                <div class="day-header-summary">
+                    <h2>Day 2：極致日式美學與納涼床燒肉</h2>
+                    <p>亮點：六月限定白葉家庭園與鴨川溪畔燒肉</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/150124_Kenninji_Kyoto_Japan01s3.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">09:30 - 12:00</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 建仁寺 兩足院</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Kenninji+Ryosokuin+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            <div class="warning-tag">⚠️ 需提前上網預約上午場</div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>建仁寺塔頭之一，以優雅的庭園聞名。</p>
+                                    <p class="detail-text-highlight">6 月限定公開的「半夏生」庭園，葉片從綠轉白，彷彿鋪上了一層白雪，視覺效果極具詩意與禪意。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-food expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://mimigo.tw/wp-content/uploads/20190903210901_29.jpg');"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">12:00 - 14:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 四條河原町商圈 & 午餐</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Shijo+Kawaramachi+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p style="font-size:13px; color:var(--text-muted);">於古今交融的長廊式商圈各自挖掘古著服飾、潮流鞋款與特色文青選物，午餐可於步行街內隨性挑選喜愛的日式小店解決。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 全段散步路線起點</span>
+                            <div class="card-title-row">
+                                <div class="card-title">👣 東山經典古街散步起點</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Kiyomizudera+Temple+Kyoto&waypoints=Sannenzaka+Kyoto%7CNinenzaka+Kyoto%7CYasaka+Shrine+Kyoto&destination=Gion+Shirakawa+Kyoto&travelmode=walking" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚶‍♂️ 從清水寺一路向下漫步，總步行時間約 40-50 分鐘。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3c/Kiyomizu.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">14:30 - 16:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 清水寺 & 二年坂、三年坂</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Kiyomizudera+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>京都最經典的地標，世界文化遺產。</p>
+                                    <p class="detail-text-highlight">著名的木造舞台，以及周邊極其完整的傳統町家石板路，是京都最有「古都感」的精華區域。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/9/96/Yasaka_jinja.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">16:30 - 18:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 八坂神社 ➔ 祇園白川 ➔ 鴨川</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>八坂神社雄偉的朱紅色西樓門；祇園白川旁沿溪流輕拂的翠綠垂柳與古老町家；以及傍晚魔幻時刻鴨川河畔著名的「等間距坐姿奇觀」。</p>
+                                    <p class="detail-text-highlight">此路線是全京都美感密度最高的魔幻散步帶。黃昏時分，石板路、木便橋與潺潺溪水互相交織，極具浪漫與攝影美學價值。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-food expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://sansalife.tw/wp-content/uploads/2023/04/yakiniku-hiro-sanjokiyamachi-31_%E7%BB%93%E6%9E%9C-jpg.webp');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">18:45 - 20:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🍽️ 京的燒肉處 弘（三條木屋町店）</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Yakiniku+Hiro+Sanjo+Kiyamachi+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            <div class="warning-tag">⚠️ 務必事前訂位並確認納涼床席位</div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>京都極具盛名的連鎖和牛燒肉店，以「一頭買進」的方式採購優質和牛。</p>
+                                    <p class="detail-text-highlight">6月限定的納涼床體驗，坐在鴨川畔吹著涼風、看著河景吃頂級燒肉，是京都夏夜最奢華的享受。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="day-3" class="day-content">
+                <div class="day-header-summary">
+                    <h2>Day 3：一路向北！下鴨神社與貴船避暑</h2>
+                    <p>亮點：糺之森芬多精、山區沁涼溪上川床饗宴</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/64/Shimogamo_01.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">09:30 - 11:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 下鴨神社（賀茂御祖神社）& 鴨川跳石</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Shimogamo+Shrine+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+
+
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>日本最古老的神社之一，隱身在廣大的原始森林「糺之森」中。</p>
+                                    <p class="detail-text-highlight">神社境內的綠蔭帶來初夏的清涼，其設計細緻、花紋典雅的「蕾絲御守」是極受歡迎的伴手禮。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">叡山電鐵：出町柳站 ➔ 貴船口站</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Demachiyanagi+Station&destination=Kibuneguchi+Station" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚆 搭乘叡山電鐵本線/鞍馬線，車程約 30 分鐘。抵達貴船口後轉搭接駁巴士抵達山區。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-food expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://image.kkday.com/v2/image/get/c_fill%2Cq_55%2Ct_webp%2Cw_960/s1.kkday.com/product_scm_20765/20260521030543_HKoYV/jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">13:00 - 15:00</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🍽️ 貴船「藤や (Fujiya)」川床料理</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Kibune+Fujiya+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            <div class="warning-tag">⚠️ 川床料理極具名氣，務必提前預約</div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>擁有近 200 年歷史的貴船川床料理發祥店。</p>
+                                    <p class="detail-text-highlight">位置絕佳，座位直接架在溪水正上方，能體驗最天然的溪谷低溫，是逃離京都悶熱的頂級選擇。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/c4/Kifune-jinja_haiden.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">15:00 - 16:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 貴船神社</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Kifune+Shrine+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+
+
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>供奉水神，位在深山的神社。</p>
+                                    <p class="detail-text-highlight">參道兩側的紅燈籠與綠樹交織出極美構圖，必體驗絕無僅有的「水占卜」，將籤詩放入神水中字跡才會浮現。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">從貴船山區前往洛東南禪寺</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Kibune+Shrine+Kyoto&destination=Nanzenji+Suirokaku" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚌 乘接駁車下山至貴船口 ➔ 搭叡山電鐵回出町柳 ➔ 轉乘市營地鐵前往蹴上站，步行抵達。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://cdn.phootime.com/1/4chv2w/j4skfq/1024/DSC_3888_2.jpg?1572452167');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">16:45 - 18:00</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 南禪寺 水路閣</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Nanzenji+Suirokaku+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>明治時代建造的紅磚拱形水道橋。</p>
+                                    <p class="detail-text-highlight">在古老禪寺中出現羅馬式建築的強烈反差，幾何拱門與光影構圖非常具有現代設計感。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="day-4" class="day-content">
+                <div class="day-header-summary">
+                    <h2>Day 4：鐵道專線！宇治紫陽花海與午後彈性</h2>
+                    <p>亮點：兩萬株繡球花盛宴與宇治抹茶頂級芭菲</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🚆 飯店 ➔ 宇治市區</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Hotel+Ms+Est+Shijo+Karasuma&destination=Mimurotoji+Temple" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚆 睡飽後步行至京阪電車，搭乘京阪本線/宇治線直達宇治地區。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://www.kyototourism.org/wp/wp-content/uploads/2021/01/Tea_Mimuroto-ji-02-1.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">11:30 - 13:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 宇治 三室戶寺</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Mimurotoji+Temple+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>被稱為「關西紫陽花霸主」的寺院。</p>
+                                    <p class="detail-text-highlight">擁有兩萬株、50 個品種的紫陽花海，山坡上的花海層次分明，還能尋找隱藏版的愛心形繡球花。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-food expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://www.niusnews.com/upload/imgs/default/2018MayFun/0517m/1.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">13:30 - 15:00</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🍽️ 下午茶：伊藤久右衛門（宇治本店）</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Itoh+Kyuemon+Uji+Main+Store" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>京都最有名的抹茶名店之一。</p>
+                                    <p class="detail-text-highlight">6 月限定的「紫陽花芭菲」極具視覺震撼，店內抹茶伴手禮種類極其豐富，是宇治必訪的甜點聖地。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 20px 0 10px 0; background: var(--bg-card); padding: 12px; border-radius: 12px; border: 1px solid var(--accordion-border);">
+                        <span style="font-size: 13px; font-weight: bold; color: var(--primary); display:block; margin-bottom:8px;">💡 15:00 之後（下午四選一彈性備案點擊切換）</span>
+                        <div class="flex-selector">
+                            <button class="flex-opt-btn active" onclick="switchFlexPlan('A', this); event.stopPropagation();">A.平等院</button>
+                            <button class="flex-opt-btn" onclick="switchFlexPlan('B', this); event.stopPropagation();">B.東福寺</button>
+                            <button class="flex-opt-btn" onclick="switchFlexPlan('C', this); event.stopPropagation();">C.逛街</button>
+                            <button class="flex-opt-btn" onclick="switchFlexPlan('D', this); event.stopPropagation();">D.稻荷</button>
+                        </div>
+
+                        <div id="plan-A" class="flex-plan-card active">
+                            <div class="timeline-card card-attraction" style="margin-bottom:0;">
+                                <div class="card-bg-wrapper" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Byodoin_Phoenix_Hall_Uji_2010.jpg/800px-Byodoin_Phoenix_Hall_Uji_2010.jpg');"></div>
+                                <div class="card-content">
+                                    <div class="card-title-row">
+                                        <div class="card-title" style="color:var(--primary);">【宇治深度】平等院 & 宇治川漫步</div>
+                                        <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Byodoin+Temple+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                                    </div>
+                                    <p style="font-size:13px; color:var(--text-muted); margin-top:6px;">深入探訪世界遺產「平等院」，看池水上優雅對稱、宛如鳳凰展翅的鳳凰堂（日幣十元硬幣背後圖案），隨後沿著宇治川平靜的沙洲河畔漫步，感受寧靜的茶鄉氛圍。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="plan-B" class="flex-plan-card">
+                            <div class="timeline-card card-attraction" style="margin-bottom:0;">
+                                <div class="card-bg-wrapper" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Mimurotoji_Ajisai.jpg/800px-Mimurotoji_Ajisai.jpg');"></div>
+                                <div class="card-content">
+                                    <div class="card-title-row">
+                                        <div class="card-title" style="color:var(--primary);">【建築美學】東福寺幾何苔蘚庭園</div>
+                                        <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Tofukuji+Temple+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                                    </div>
+                                    <p style="font-size:13px; color:var(--text-muted); margin-top:6px;">搭乘京阪電車順路停靠「東福寺」。其本坊方丈庭園由近代大師重森三玲設計，著名的「市松格子庭園」將翠綠的苔蘚與方形石塊縱橫交錯，展現極具現代抽象幾何美感的禪意張力。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="plan-C" class="flex-plan-card">
+                            <div class="timeline-card card-attraction" style="margin-bottom:0;">
+                                <div class="card-bg-wrapper" style="background-image: url('https://mimigo.tw/wp-content/uploads/20190903210901_29.jpg');"></div>
+                                <div class="card-content">
+                                    <div class="card-title-row">
+                                        <div class="card-title" style="color:var(--primary);">【市區血拚】四條河原町大採購</div>
+                                        <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Shijo+Kawaramachi+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                                    </div>
+                                    <p style="font-size:13px; color:var(--text-muted); margin-top:6px;">直接搭電車殺回市中心「四條河原町」，針對心儀的日本服飾品牌、潮流鞋鋪與百貨雜貨櫃位進行全方位的挖寶採購，將晚上的採購行程提前拉滿。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="plan-D" class="flex-plan-card">
+                            <div class="timeline-card card-attraction" style="margin-bottom:0;">
+                                <div class="card-bg-wrapper" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Fushimi_Inari_Taisha_Senbon_Torii.jpg/800px-Fushimi_Inari_Taisha_Senbon_Torii.jpg');"></div>
+                                <div class="card-content">
+                                    <div class="card-title-row">
+                                        <div class="card-title" style="color:var(--primary);">【經典鳥居】伏見稻荷大社</div>
+                                        <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                                    </div>
+                                    <p style="font-size:13px; color:var(--text-muted); margin-top:6px;">全國稻荷神社總本社，以數千座紅色鳥居組成的高聳隧道聞名。</p>
+                                    <p style="font-size:13px; color:var(--primary); font-weight: bold; margin-top: 4px;">山區環境生態豐富，傍晚時分的光影感強烈，非常適合感受京都神祕與靜謐的一面。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="day-5" class="day-content">
+                <div class="day-header-summary">
+                    <h2>Day 5：西南尋寶線！最大市集與料亭</h2>
+                    <p>亮點：每月限定弘法市集、水上竹籬料亭與絕美花手水</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://i0.wp.com/boo2k.com/wp-content/uploads/2777/07/%E6%9C%AA%E5%91%BD%E5%90%8D-4672.jpg?resize=860%2C573&ssl=1');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">09:30 - 11:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 東寺「弘法市」古董市集</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Toji+Temple+Kyoto" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            <div class="warning-tag">⚠️ 每月 21 日限定舉辦</div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>每月 21 日在東寺舉行的京都最大古物跳蚤市集。</p>
+                                    <p class="detail-text-highlight">千家攤位，從古董瓷器、舊書、二手和服到特色小吃應有盡有，能體驗到京都最真實、熱鬧的一面。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">東寺 ➔ JR長岡京站 ➔ 錦水亭</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Toji+Temple&destination=Kinsuitei+Nagaokakyo" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚆 從東寺回京都站，搭JR直奔「長岡京站」，出站後轉乘計程車約5分鐘即可直達。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-food expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://kinsuitei.co.jp/images/pic/ex02.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">12:15 - 14:15</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🍽️ 晚餐：長岡京「錦水亭」水上料亭</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Kinsuitei+Nagaokakyo" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            <div class="warning-tag">⚠️ 極其熱門，務必提早數週預訂</div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>位於長岡天滿宮八條池畔的百年料亭。</p>
+                                    <p class="detail-text-highlight">獨特的「水上包廂」建築，在靜謐的池景與綠蔭中享用精緻懷石料理，氛圍極其高雅，極度適合攝影。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">從錦水亭計程車直攻楊谷寺</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Kinsuitei+Nagaokakyo&destination=Yokoku-ji+Temple" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚕 建議在餐廳直接請櫃檯幫忙叫計程車，直攻位於山區的楊谷寺，車程約 15-20 分鐘。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-attraction expandable-card" onclick="toggleCardDetails(this)">
+                        <div class="timeline-node"></div>
+                        <div class="card-bg-wrapper" style="background-image: url('https://www.kyototourism.org/wp/wp-content/uploads/2021/01/Bamboo_Yanagidani-Kannon-01.jpg');"></div>
+                        
+                        <div class="card-content">
+                            <span class="card-time-badge">14:15 - 16:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🏛️ 楊谷寺（柳谷觀音）</div>
+                                <a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=Yokoku-ji+Yanagidani+Kannon" target="_blank" onclick="event.stopPropagation()">📍</a>
+                            </div>
+                            
+                            <div class="accordion-content">
+                                <div class="detail-section">
+                                    <p>日本「花手水」的發祥地。</p>
+                                    <p class="detail-text-highlight">充滿藝術感的浮花設計，將繡球花放滿水盤與迴廊，視覺飽和度與層次感達到巔峰，是賞花攝影的聖地。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">🚆 點到點交通</span>
+                            <div class="card-title-row">
+                                <div class="card-title">下山返回四條烏丸商圈</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Yokoku-ji+Temple&destination=Hotel+Ms+Est+Shijo+Karasuma" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚕 搭計程車下山至JR車站 ➔ 搭JR回京都站 ➔ 轉地鐵回四條烏丸。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="day-6" class="day-content">
+                <div class="day-header-summary">
+                    <h2>Day 6：把握初夏早晨，準備返程</h2>
+                    <p>亮點：最後藥妝補給與順利登機</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-card card-food">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">上午</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🛍️ 飯店周邊藥妝與伴手禮最後補給</div>
+                            </div>
+                            <p style="font-size:13px; color:var(--text-muted);">睡到自然醒後，利用早晨在四條烏丸、大丸百貨或周邊松本清等藥妝店，將尚未買齊的土產、伴手禮及常備藥品一次做最後的打包裝箱。</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-transport">
+                        <div class="timeline-node"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge">11:00 - 12:30</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🚆 四條烏丸 ➔ 關西國際機場 (KIX)</div>
+                                <a class="btn-map" href="https://www.google.com/maps/dir/?api=1&origin=Hotel+Ms+Est+Shijo+Karasuma&destination=Kansai+International+Airport" target="_blank" onclick="event.stopPropagation()">🗺️</a>
+                            </div>
+                            <div class="route-guide-text">🚆 從京都車站搭乘特急 Haruka 直達關西機場，務必於 12:15 前抵達機場航廈辦理登機。</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card card-hotel" style="border-left-color: var(--primary);">
+                        <div class="timeline-node" style="background: var(--primary);"></div>
+                        <div class="card-content">
+                            <span class="card-time-badge" style="background: var(--primary);">13:45</span>
+                            <div class="card-title-row">
+                                <div class="card-title">🛫 飛返高雄（航班 AK171）</div>
+                            </div>
+                            <p style="font-size:13px; color:var(--text-muted);">持實體護照刷自動通關，13:45 準時起飛，預計 16:00 順利降落高雄小港機場，帶著滿滿的回憶返抵家門。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <script>
+        // Check system dark mode preference on load
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('dark-mode-btn').innerText = '☀️';
+        }
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.getElementById('dark-mode-btn');
+            if (document.body.classList.contains('dark-mode')) {
+                btn.innerText = '☀️';
+            } else {
+                btn.innerText = '🌙';
+            }
+        }
+
+        // Tab switching logic for persistent header nav
+        function switchPage(pageId, btnElement) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Sub-tab switching logic for Day 1 - Day 6
+        function switchDay(dayNum, btnElement) {
+            document.querySelectorAll('.day-tab-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            document.querySelectorAll('.day-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('day-' + dayNum).classList.add('active');
+            
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Whole Card Click Expansion Logic (Toggle)
+        function toggleCardDetails(cardElement) {
+            const content = cardElement.querySelector('.accordion-content');
+            if (!content) return;
+            
+            const isExpanded = cardElement.classList.contains('expanded');
+            
+            if (!isExpanded) {
+                // Expanding
+                cardElement.classList.add('expanded');
+                content.style.maxHeight = content.scrollHeight + 30 + 'px';
+            } else {
+                // Collapsing
+                cardElement.classList.remove('expanded');
+                content.style.maxHeight = null; // Reset inline style, let CSS handle max-height: 0
+            }
+        }
+
+        // Selector logic for Day 4 Flex Contingency Plans
+        function switchFlexPlan(planLetter, btnElement) {
+            // Prevent event from bubbling up and triggering card expansion if embedded
+            event.stopPropagation();
+            
+            const parent = btnElement.parentElement;
+            parent.querySelectorAll('.flex-opt-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const container = parent.parentElement;
+            container.querySelectorAll('.flex-plan-card').forEach(card => card.classList.remove('active'));
+            container.querySelector('#plan-' + planLetter).classList.add('active');
+        }
+    </script>
+</body>
+</html>
